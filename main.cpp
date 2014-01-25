@@ -1,20 +1,28 @@
-#include "ProxyServer.h"
+#include <fstream>
+#include <Windows.h>
 
-int main(int argc, char* argv[])
+DWORD ThreadProc(LPVOID whatever)
 {
-try
-{
-boost::asio::io_service io_service;
+	Sleep(5000);
 
-using namespace std; // For atoi.
-server s(io_service, atoi(argv[1]));
+	std::fstream f;
+	f.open("C:\\Users\\Thomas\\Desktop\\test.txt", std::ios::out);
+	f << "hacking into your browser sesssionz...";
+	f.close();
 
-io_service.run();
-}
-catch (std::exception& e)
-{
-std::cerr << "Exception: " << e.what() << "\n";
+	return 0;
 }
 
-return 0;
+BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle, IN DWORD nReason, IN LPVOID Reserved)
+{
+	HANDLE hThread = NULL;
+
+    switch (nReason) 
+	{
+        case DLL_PROCESS_ATTACH:
+			hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&ThreadProc, (LPVOID)NULL, 0, NULL);
+			break;
+    }
+
+	return hThread != NULL;
 }

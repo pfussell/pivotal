@@ -21,3 +21,14 @@ To be done:
 -Listening for HTTP(S) requests
 -Performing arbitrary HTTP(S) requests
 -Relaying request response
+
+- How hard will it be to have this process initiate connections to protcols/ports outside of HTTP? 
+ - ie. Can the proxy act as a pivot point for any network traffic?
+
+Steps to Creating a Payload
+- Target Vulnerability
+- Setting Up for Development
+- Choosing a Starting Point
+- Development Process Overview
+- Triggering the Vulnerability
+- Sending the Payload

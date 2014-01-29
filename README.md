@@ -13,10 +13,11 @@ Big idea
 Current status
 - driver.exe loads DLL using LoadLibrary
 - DLL's DllMain launches a thread which starts the proxy server
-- Server listens for connections on 127.0.0.1:4040
+- Server listens for connections on 0.0.0.1:4040
 - Incoming requests are parsed, transmitted through WinINet
 - HTTPS requests are trashed for now
 - Responses are returned using boost asio
+- Most NON-HTTP requests giving an error of "doens't support SSL yet"
 - ?
 - Profit
 
@@ -28,16 +29,24 @@ Building
 Testing
 - Run driver.exe. It expects a dll named pivotal.dll in the same directory.
 - After five seconds, server will start on a separate thread
-- Set proxy setting to use 127.0.0.1:4040
+- Set proxy setting to use 0.0.0.1:4040
 - All connections will be displayed in the console
 - All non-SLL connections should work!
+  - Doesn't play nice with Nmap + proxychains, but lower level tools seem to work (need to PCAP this to see whats happening)
+  - Netcat will connect but the proxy gives a status of - connection forefully closed by remote host (again need to PCAP this to see why)
+  - The solution to both of these may be to A) Fix SSL B) Build a port scanner that will work over/with HTTP
+  - Most NON-HTTP requests give me an error of "doens't support SSL yet"
 
 To be done:
+- Create a port scanner that will run over HTTP to play nice with our proxy
+  - Need to do some testing with making requests to ports over HTTP to see how this will work
 - Add HTTPS support. [See example here](http://www.boost.org/doc/libs/1_53_0/doc/html/boost_asio/example/ssl/server.cpp)
 - Actually try injecting this into IE and see what happens
-
-- How hard will it be to have this process initiate connections to protcols/ports outside of HTTP? 
- - ie. Can the proxy act as a pivot point for any network traffic?
+  - Make the dll reflective for injection (https://github.com/stephenfewer/ReflectiveDLLInjection)
+- Setup to be delivered with MSF
+  - patch the reflective DLL to make it compatible with the dllinject stager
+  - deliver the patched reflective DLL to the dllinject stager
+- SEE: http://blog.strategiccyber.com/2012/09/17/delivering-custom-payloads-with-metasploit-using-dll-injection/
 
 Steps to Creating a Payload
 - Target Vulnerability

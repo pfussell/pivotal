@@ -1,12 +1,15 @@
 #include <iostream>
 
 #include "server/mitm_proxy.h"
+#include "tls/rijndael.h"
 
 #include <Windows.h>
 
 DWORD ThreadProc(LPVOID whatever)
 {
 	Sleep(5000);
+
+	pivotal::tls::rijndael::test();
 
 	pivotal::server::mitm_proxy p("127.0.0.1", 4040);
 	p.run();

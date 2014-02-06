@@ -7,6 +7,9 @@
     <Filter Include="server">
       <UniqueIdentifier>{968b49ae-f0a7-463a-bb85-d939aa0d472a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="p2">
+      <UniqueIdentifier>{1fa8a7a1-dc65-4eaf-b292-3a729daf0410}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\dllmain.cpp" />
@@ -36,6 +39,12 @@
     </ClCompile>
     <ClCompile Include="..\source\server\mitm_proxy.cpp">
       <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tls\rijndael.cpp">
+      <Filter>tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\p2\server.cpp">
+      <Filter>p2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,5 +82,47 @@
       <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="..\source\constants.h" />
+    <ClInclude Include="..\source\tls\rijndael.h">
+      <Filter>tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\certificate.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\handshake_extension.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\handshake_handler.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\handshake_record.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\header.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\http.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\Int24.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\record.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\request.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\request_handler.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\response.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\server.h">
+      <Filter>p2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\p2\tls.h">
+      <Filter>p2</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

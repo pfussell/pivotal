@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\dllmain.cpp" />
+    <ClCompile Include="..\source\p2\server.cpp" />
     <ClCompile Include="..\source\server\connection.cpp" />
     <ClCompile Include="..\source\server\connection_manager.cpp" />
     <ClCompile Include="..\source\server\mitm_proxy.cpp" />
@@ -28,10 +29,24 @@
     <ClCompile Include="..\source\server\response.cpp" />
     <ClCompile Include="..\source\tls\handshake.cpp" />
     <ClCompile Include="..\source\tls\record.cpp" />
+    <ClCompile Include="..\source\tls\rijndael.cpp" />
     <ClCompile Include="..\source\tls\serializable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\constants.h" />
+    <ClInclude Include="..\source\p2\certificate.h" />
+    <ClInclude Include="..\source\p2\handshake_extension.h" />
+    <ClInclude Include="..\source\p2\handshake_handler.h" />
+    <ClInclude Include="..\source\p2\handshake_record.h" />
+    <ClInclude Include="..\source\p2\header.h" />
+    <ClInclude Include="..\source\p2\http.h" />
+    <ClInclude Include="..\source\p2\Int24.h" />
+    <ClInclude Include="..\source\p2\record.h" />
+    <ClInclude Include="..\source\p2\request.h" />
+    <ClInclude Include="..\source\p2\request_handler.h" />
+    <ClInclude Include="..\source\p2\response.h" />
+    <ClInclude Include="..\source\p2\server.h" />
+    <ClInclude Include="..\source\p2\tls.h" />
     <ClInclude Include="..\source\server\connection.h" />
     <ClInclude Include="..\source\server\connection_manager.h" />
     <ClInclude Include="..\source\server\header.h" />
@@ -42,6 +57,7 @@
     <ClInclude Include="..\source\server\response.h" />
     <ClInclude Include="..\source\tls\handshake.h" />
     <ClInclude Include="..\source\tls\record.h" />
+    <ClInclude Include="..\source\tls\rijndael.h" />
     <ClInclude Include="..\source\tls\serializable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -58,7 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

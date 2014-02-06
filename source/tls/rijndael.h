@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+namespace pivotal {
+namespace tls {
+
 class invalid_block_size_exception : public std::runtime_error
 {
 public:
@@ -48,31 +51,29 @@ private:
 
 	static bool is_valid_key_size(size_t key_size);
 
-	static void initialize();
-
-	static bool initialized;
+	// Not supporting 160, 224 for now
+	static uint32_t valid_block_sizes[1];
 
 	// Not supporting 160, 224 for now
-	static const std::array<size_t, 1> valid_block_sizes;
+	static uint32_t valid_key_sizes[1];
 
-	// Not supporting 160, 224 for now
-	static const std::array<size_t, 1> valid_key_sizes;
+	static uint32_t t[8][256];
 
-	static std::array<std::array<uint32_t, 256>, 8> t;
+	static uint32_t u[4][256];
 
-	static std::array<std::array<uint32_t, 256>, 4> u;
+	static uint8_t s[256];
 
-	static std::array<uint8_t, 256> s;
+	static uint8_t si[256];
 
-	static std::array<uint8_t, 256> si;
+	static uint8_t rcon[30];
 
-	static std::array<uint8_t, 30> rcon;
+	static uint8_t log[256];
 
-	static std::array<uint8_t, 256> log;
+	static uint8_t alog[256];
 
-	static std::array<uint8_t, 256> alog;
+	static uint8_t e_shifts[3][4];
 
-	static std::array<std::array<std::pair<int, int>, 4>, 3> shifts;
+	static uint8_t d_shifts[3][4];
 
 	size_t key_size_;
 
@@ -82,3 +83,6 @@ private:
 
 	std::vector<std::vector<uint32_t>> kd_;
 };
+
+} // namespace tls
+} // namespace pivotal

@@ -30,10 +30,13 @@ Testing
 - Set proxy setting to use 0.0.0.0:4040
 - All connections will be displayed in the console
 - All non-SLL connections should work!
-  - Doesn't play nice with Nmap + proxychains, but lower level tools seem to work (need to PCAP this to see whats happening)
-  - Netcat will connect but the proxy gives a status of - connection forefully closed by remote host (again need to PCAP this to see why)
-  - The solution to both of these may be to A) Fix SSL B) Build a port scanner that will work over/with HTTP
-  - Most NON-HTTP requests give me an error of "doens't support SSL yet"
+- Testing in a lab enviornment verified that the proxy allows access to hosts to which there is an open session.
+  - Testing scinaro used:
+    - Target host is on a remote subnet that is segmented from the attacker by ACL's and stateful inspection
+    - An intermediary can access the target host but only with web traffic
+     - The ideal for testing would be if access to the remote host was restriced by an additional itermediary like a jump box because it is possible to mimic HTTP traffic and fool packet inspection
+    - We compromise the itermediary execute our payload 
+    - We can now interact with any host the user has a session open to
 
 To be done:
 - Create a port scanner that will run over HTTP to play nice with our proxy

@@ -1,12 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\dllmain.cpp" />
-    <ClCompile Include="..\request_parser.cpp" />
+    <Filter Include="tls">
+      <UniqueIdentifier>{8657c39b-7e64-4088-bf10-4c2ab9b5f136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{968b49ae-f0a7-463a-bb85-d939aa0d472a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\request.hpp" />
-    <ClInclude Include="..\request_parser.hpp" />
-    <ClInclude Include="..\header.hpp" />
+    <ClCompile Include="..\source\dllmain.cpp" />
+    <ClCompile Include="..\source\server\request_handler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\server\request_parser.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\server\response.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\server\connection.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\server\connection_manager.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tls\serializable.cpp">
+      <Filter>tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tls\handshake.cpp">
+      <Filter>tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tls\record.cpp">
+      <Filter>tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\server\mitm_proxy.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\server\request.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\request_handler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\request_parser.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\response.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\connection.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\connection_manager.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\header.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\tls\record.h">
+      <Filter>tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\tls\serializable.h">
+      <Filter>tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\tls\handshake.h">
+      <Filter>tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\server\mitm_proxy.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\constants.h" />
   </ItemGroup>
 </Project>

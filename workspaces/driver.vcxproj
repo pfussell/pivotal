@@ -115,7 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pivotal\pivotal.vcxproj">
+    <ProjectReference Include="pivotal.vcxproj">
       <Project>{58995d6d-2911-4b0a-a0a9-59d2e7f0cb84}</Project>
       <Private>false</Private>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
@@ -125,7 +125,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\source\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

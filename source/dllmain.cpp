@@ -1,13 +1,14 @@
 #include <iostream>
-#include <Windows.h>
 
-#include "proxy.H"
+#include "server/mitm_proxy.h"
+
+#include <Windows.h>
 
 DWORD ThreadProc(LPVOID whatever)
 {
 	Sleep(5000);
 
-	proxy p("0.0.0.0", 4040);
+	pivotal::server::mitm_proxy p("127.0.0.1", 4040);
 	p.run();
 
 	return 0;

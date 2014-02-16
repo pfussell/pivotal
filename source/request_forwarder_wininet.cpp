@@ -1,4 +1,5 @@
 #include "request_forwarder.h"
+#include "request.h"
 
 #include <Windows.h>
 #include <WinInet.h>
@@ -54,7 +55,7 @@ template<typename T>
 static std::vector<T> split_string(const T &string, wchar_t delimiter)
 {
     std::vector<T> split;
-    std::wstringstream ss(s);
+    std::wstringstream ss(string);
     T accept_type;
 
     while(std::getline(ss, accept_type, delimiter))
@@ -70,11 +71,11 @@ static std::vector<T> split_string(const T &string, wchar_t delimiter)
 namespace pivotal {
 namespace http {
 
-struct request_handler_impl
+struct request_forwarder_impl
 {
-	request_handler_impl::request_handler_impl() = default;
+	request_forwarder_impl() = default;
 
-	request_handler_impl::~request_handler_impl()
+	~request_forwarder_impl()
 	{
 		close_all();
 	}
@@ -95,26 +96,40 @@ struct request_handler_impl
 			return false;
 		}
 
-		h_connection = InternetConnect(h_internet, to_wide(server).c_str(), port, nullptr, nullptr, INTERNET_SERVICE_HTTP, 0, nullptr);
+		INTERNET_PORT p;
+
+		switch(port)
+		{
+		case 80:
+			p = INTERNET_DEFAULT_HTTP_PORT;
+			break;
+		case 443:
+			p = INTERNET_DEFAULT_HTTPS_PORT;
+			break;
+		default:
+			throw std::runtime_error("unsupported port: " + std::to_string(port));
+		}
+
+		h_connection = InternetConnect(h_internet, to_wide(server).c_str(), p, nullptr, nullptr, INTERNET_SERVICE_HTTP, 0, (DWORD_PTR)nullptr);
 
 		return h_connection != nullptr;
 	}
 
 	bool open_request(const wininet_request &request)
 	{
-	    auto accept_types = parse_accept_types(accept);
+	    auto accept_types = split_string(request.accept_types, L',');
 	    std::vector<LPCWSTR> accept_types_pointers(accept_types.size() + 1, nullptr);
-	    auto get_string_pointer = [](const std::wstring &s) { return s.c_str(); });
+	    auto get_string_pointer = [](const std::wstring &s) { return s.c_str(); };
 	    std::transform(accept_types.begin(), accept_types.end(), accept_types_pointers.begin(), get_string_pointer);
 
-	    flags = build_request_flags(request);
+	    auto flags = build_request_flags(request);
 
-		h_request = HttpOpenRequest(h_connection, request.method.c_str(), request.object.c_str(), request.http_version.c_str(), nullptr, accept_types_pointers, flags, 0);
+		h_request = HttpOpenRequest(h_connection, request.method.c_str(), request.object.c_str(), request.http_version.c_str(), nullptr, accept_types_pointers.data(), flags, 0);
 
 		return h_request != nullptr;
 	}
 
-	bool request_handler::send_request(const std::vector<header> &headers)
+	bool send_request(const std::vector<header> &headers)
 	{
 		if(h_request == nullptr)
 		{
@@ -130,27 +145,30 @@ struct request_handler_impl
 			headers_string.append(L"\r\n");
 		}
 		headers_string.append(L"\r\n");
+		headers_string.append(1, L'\0');
 
 		return HttpSendRequest(h_request, headers_string.c_str(), -1L, nullptr, 0) == TRUE;
 	}
 
-	response request_handler::read_response()
+	response read_response()
 	{
 		response response;
 		bool keep_reading;
-		size_t bytes_read;
+		DWORD bytes_read;
 
 		try
 		{
 			do
 			{
-				keep_reading = InternetReadFile(h_request, buff, read_buffer.size(), &bytes_read);
-				response.content.insert(response.content.end(), buff.begin(), buff.begin() + bytes_read);
+				keep_reading = InternetReadFile(h_request, read_buffer.data(), read_buffer.size(), &bytes_read);
+				response.content.insert(response.content.end(), read_buffer.begin(), read_buffer.begin() + bytes_read);
 			} while(keep_reading && bytes_read > 0);
+			std::cout << "response returned through wininet: " << response.content << std::endl;
 		}
 		catch(std::exception e)
 		{
-			response = response::stock_response(300);
+			std::cout << "read response failed" << std::cout;
+			response = response::stock_response(response::status_type::internal_server_error);
 		}
 
 		return response;
@@ -169,6 +187,8 @@ struct request_handler_impl
 		{
 			InternetCloseHandle(h_request);
 		}
+
+		h_request = nullptr;
 	}
 
 	void close_connection()
@@ -177,6 +197,8 @@ struct request_handler_impl
 		{
 			InternetCloseHandle(h_connection);
 		}
+
+		h_connection = nullptr;
 	}
 
 	void close_internet()
@@ -185,14 +207,20 @@ struct request_handler_impl
 		{
 			InternetCloseHandle(h_internet);
 		}
+
+		h_internet = nullptr;
 	}
 
 	HINTERNET h_request = nullptr;
 	HINTERNET h_connection = nullptr;
 	HINTERNET h_internet = nullptr;
+
+	static const size_t read_buffer_size = 2048;
+
+	std::array<char, read_buffer_size> read_buffer;
 };
 
-request_forwarder::request_forwarder() : impl_(new request_handler_impl())
+request_forwarder::request_forwarder() : impl_(new request_forwarder_impl())
 {
 
 }
@@ -207,47 +235,55 @@ response request_forwarder::forward_request(const request& request)
 	response response;
     response.status = response::ok;
 
-	auto user_agent = request.has_header("User-Agent") ? request.get_header("User-Agent") : "Mozilla/4.0";
-
-    if(!open_internet(user_agent, true))
+    if(impl_->h_internet == nullptr)
     {
-        std::cout << "InternetOpen failed with error code " << GetLastError() << std::endl;
-        return false;
-    }
+		auto user_agent = request.has_header("User-Agent") ? request.get_header("User-Agent") : "Mozilla/4.0";
 
-	if(!open_connection(request.server, request.port))
-    {
-        std::cout << "InternetConnect failed with error code " << GetLastError() << std::endl;
-		close_internet();
-        return false;
-    }
-
-	http_version http_version = request.http_version_minor == 1 ? http_version::http11 : http_version::http10;
-	std::string accept = request.has_header("Accept") ? request.get_header("Accept") : "";
-
-	if(!open_request(request.method, request.object, http_version, accept, request.secure))
-    {
-        std::cout << "HttpOpenRequest failed with error code " << GetLastError() << std::endl;
-		close_connection();
-		close_internet();
-        return false;
-    }
-
-	if(!send_request(request.headers))
-	{
-		std::cout << "HttpSendRequest failed with error code " << GetLastError() << std::endl;
-		close_connection();
-		close_internet();
-		return false;
+	    if(!impl_->open_internet(user_agent, true))
+	    {
+	        std::cout << "InternetOpen failed with error code " << GetLastError() << std::endl;
+	        return response::stock_response(response::status_type::not_found);
+	    }
 	}
 
-	write_response(response);
+	if(impl_->h_connection == nullptr)
+	{
+		std::cout << "opening connection: " << request.server << " " << request.port << std::endl;
+		if(!impl_->open_connection(request.server, request.port))
+	    {
+	        std::cout << "InternetConnect failed with error code " << GetLastError() << std::endl;
+			impl_->close_internet();
+	        return response::stock_response(response::status_type::not_found);
+	    }
+	}
 
-	close_request();
-	close_connection();
-	close_internet();
+	if(impl_->h_request == nullptr)
+	{
+	    wininet_request w_request;
+	    w_request.method = std::wstring(request.method.begin(), request.method.end());
+		std::string accept = request.has_header("Accept") ? request.get_header("Accept") : "";
+		w_request.using_tls = request.secure;
 
-	return false;
+		if(!impl_->open_request(w_request))
+	    {
+	        std::cout << "HttpOpenRequest failed with error code " << GetLastError() << std::endl;
+			impl_->close_connection();
+			impl_->close_internet();
+	        return response::stock_response(response::status_type::not_found);
+	    }
+	}
+
+	if(!impl_->send_request(request.headers))
+	{
+		std::cout << "HttpSendRequest failed with error code " << GetLastError() << std::endl;
+		impl_->close_connection();
+		impl_->close_internet();
+        return response::stock_response(response::status_type::not_found);
+	}
+
+	response = impl_->read_response();
+
+	return response;
 }
 
 } // namespace http

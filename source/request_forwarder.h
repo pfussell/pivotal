@@ -25,7 +25,7 @@ private:
 
 	std::array<char, read_buffer_size> read_buffer;
 
-	const request_forwarder_impl *impl_;
+	request_forwarder_impl *impl_;
 };
 
 } // namespace http

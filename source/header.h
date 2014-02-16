@@ -3,7 +3,7 @@
 #include <string>
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 struct header
 {
@@ -11,5 +11,5 @@ struct header
 	std::string value;
 };
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

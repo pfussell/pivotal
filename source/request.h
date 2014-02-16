@@ -7,7 +7,7 @@
 #include "header.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 enum { buffer_size = 8192 }; 
 
@@ -44,13 +44,7 @@ struct request
 		}
 		throw std::runtime_error("header not found: " + name);
 	}
-
-	std::wstring get_header_wide(const std::string &name) const
-	{
-		auto header = get_header(name);
-		return std::wstring(header.begin(), header.end());
-	}
 };
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

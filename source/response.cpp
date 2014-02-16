@@ -3,7 +3,7 @@
 #include "response.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 namespace status_strings {
 
@@ -246,5 +246,73 @@ response response::stock_response(response::status_type status)
   return rep;
 }
 
-} // namespace server
+std::string response::to_string() const
+{
+    std::stringstream ss;
+    switch (status)
+    {
+    case response::ok:
+        ss << status_strings::ok;
+        break;
+    case response::connected:
+        ss << status_strings::connected;
+        break;
+    case response::created:
+        ss << status_strings::created;
+        break;
+    case response::accepted:
+        ss << status_strings::accepted;
+        break;
+    case response::no_content:
+        ss << status_strings::no_content;
+        break;
+    case response::multiple_choices:
+        ss << status_strings::multiple_choices;
+        break;
+    case response::moved_permanently:
+        ss << status_strings::moved_permanently;
+        break;
+    case response::moved_temporarily:
+        ss << status_strings::moved_temporarily;
+        break;
+    case response::not_modified:
+        ss << status_strings::not_modified;
+        break;
+    case response::bad_request:
+        ss << status_strings::bad_request;
+        break;
+    case response::unauthorized:
+        ss << status_strings::unauthorized;
+        break;
+    case response::forbidden:
+        ss << status_strings::forbidden;
+        break;
+    case response::not_found:
+        ss << status_strings::not_found;
+        break;
+    case response::internal_server_error:
+        ss << status_strings::internal_server_error;
+        break;
+    case response::not_implemented:
+        ss << status_strings::not_implemented;
+        break;
+    case response::bad_gateway:
+        ss << status_strings::bad_gateway;
+        break;
+    case response::service_unavailable:
+        ss << status_strings::service_unavailable;
+        break;
+    default:
+        ss << status_strings::internal_server_error;
+    }
+    for(auto header : headers)
+    {
+        ss << header.name << ": " << header.value << "\r\n";
+    }
+    ss << "\r\n";
+    ss << content;
+    return ss.str();
+}
+
+} // namespace http
 } // namespace pivotal

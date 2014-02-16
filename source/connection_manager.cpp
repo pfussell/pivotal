@@ -1,7 +1,7 @@
 #include "connection_manager.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 connection_manager::connection_manager()
 {
@@ -28,5 +28,5 @@ void connection_manager::stop_all()
 	connections_.clear();
 }
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

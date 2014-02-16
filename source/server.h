@@ -3,9 +3,12 @@
 #include <boost/asio.hpp>
 #include <string>
 
-#include "connection.hpp"
-#include "connection_manager.hpp"
-#include "request_handler.hpp"
+#include "credentials.h"
+#include "connection.h"
+#include "connection_manager.h"
+#include "request_forwarder.h"
+#include "session.h"
+#include "standard_policy.h"
 
 namespace pivotal {
 namespace http {
@@ -19,73 +22,15 @@ public:
 
     /// Construct the server to listen on the specified TCP address and port, and
     /// serve up files from the given directory.
-    explicit server(const std::string& address, const std::string& port);
+    explicit server(boost::asio::io_service& io_service, const std::string& address = "0.0.0.0", const std::string& port = "4040");
 
 private:
-    /// Perform an asynchronous accept operation.
-    void do_accept();
+    session::pointer make_session();
 
-    /// Wait for a request to stop the server.
-    void do_await_stop();
-
-    asio_tls_server(boost::asio::io_service& io_service, unsigned short port) :
-    m_acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
-	m_session_manager(m_rng),
-	m_creds(m_rng)
-    {
-	session::pointer new_session = make_session();
-
-	m_acceptor.async_accept(
-            new_session->get_socket(),
-            boost::bind(
-		&asio_tls_server::handle_accept,
-		this,
-		new_session,
-		boost::asio::placeholders::error)
-            );
-    }
-
-private:
-    session::pointer make_session()
-    {
-	return session::create(
-            m_acceptor.get_io_service(),
-            m_session_manager,
-            m_creds,
-            m_policy,
-            m_rng
-            );
-    }
-
-    void handle_accept(session::pointer new_session,
-		       const boost::system::error_code& error)
-    {
-	if (!error)
-	{
-            new_session->start();
-
-            new_session = make_session();
-
-            m_acceptor.async_accept(
-		new_session->get_socket(),
-		boost::bind(
-		    &asio_tls_server::handle_accept,
-		    this,
-		    new_session,
-		    boost::asio::placeholders::error)
-		);
-	}
-    }
-
-    boost::asio::ip::tcp::acceptor m_acceptor;
-
-    Botan::AutoSeeded_RNG m_rng;
-    Botan::TLS::Session_Manager_In_Memory m_session_manager;
-    InsecurePolicy m_policy;
-    Credentials_Manager_Simple m_creds;
+    void handle_accept(session::pointer new_session, const boost::system::error_code& error);
 
     /// The io_service used to perform asynchronous operations.
-    boost::asio::io_service io_service_;
+    boost::asio::io_service &io_service_;
 
     /// The signal_set is used to register for process termination notifications.
     boost::asio::signal_set signals_;
@@ -93,14 +38,15 @@ private:
     /// Acceptor used to listen for incoming connections.
     boost::asio::ip::tcp::acceptor acceptor_;
 
-    /// The connection manager which owns all live connections.
-    connection_manager connection_manager_;
+    Botan::AutoSeeded_RNG rng_;
 
-    /// The next socket to be accepted.
-    boost::asio::ip::tcp::socket socket_;
+    Botan::TLS::Session_Manager_In_Memory session_manager_;
 
-    /// The handler for all incoming requests.
-    request_handler request_handler_;
+    standard_policy policy_;
+
+    simple_credentials_manager credentials_;
+
+    request_forwarder forwarder_;
 };
 
 } // namespace http

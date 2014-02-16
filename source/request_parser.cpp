@@ -5,7 +5,7 @@
 #include "request.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 request_parser::request_parser()
   : state_(method_start)
@@ -351,6 +351,5 @@ bool request_parser::is_digit(int c)
   return c >= '0' && c <= '9';
 }
 
-} // namespace server
+} // namespace http
 } // namespace pivotal
-

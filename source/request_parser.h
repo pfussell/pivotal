@@ -5,7 +5,7 @@
 #include "request.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 class request_parser
 {
@@ -69,5 +69,5 @@ private:
     } state_;
 };
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

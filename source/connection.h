@@ -6,11 +6,11 @@
 
 #include "response.h"
 #include "request.h"
-#include "request_handler.h"
+#include "request_forwarder.h"
 #include "request_parser.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 class connection_manager;
 
@@ -18,7 +18,7 @@ class connection_manager;
 class connection : public std::enable_shared_from_this<connection>
 {
 public:
-    explicit connection(boost::asio::ip::tcp::socket socket, connection_manager &manager, request_handler &handler);
+    explicit connection(boost::asio::ip::tcp::socket socket, connection_manager &manager, request_forwarder &forwarder);
 
     void start();
 
@@ -33,11 +33,9 @@ private:
 
     connection_manager &connection_manager_;
 
-    request_handler &request_handler_;
+    request_forwarder &request_forwarder_;
 
 	std::array<char, buffer_size> request_buffer_;
-
-	std::array<char, buffer_size> response_buffer_;
 
     request request_;
 
@@ -48,5 +46,5 @@ private:
 
 typedef std::shared_ptr<connection> connection_ptr;
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

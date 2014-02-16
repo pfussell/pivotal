@@ -3,15 +3,14 @@
 
 #include "connection.h"
 #include "connection_manager.h"
-#include "request_handler.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
-connection::connection(boost::asio::ip::tcp::socket socket, connection_manager &manager, request_handler &handler)
+connection::connection(boost::asio::ip::tcp::socket socket, connection_manager &manager, request_forwarder &forwarder)
     : socket_(std::move(socket)),
       connection_manager_(manager),
-      request_handler_(handler)
+      request_forwarder_(forwarder)
 {
 
 }
@@ -39,11 +38,10 @@ void connection::read_request()
 
 	request_parser::result_type result;
 	std::tie(result, std::ignore) = request_parser_.parse(request_, request_buffer_.data(), request_buffer_.data() + bytes_transferred);
-	bool tunnel = false;
 
 	if(result == request_parser::good)
 	{
-		tunnel = request_handler_.handle_request(request_, response_);
+		response_ = request_forwarder_.forward_request(request_);
 	}
 	else
 	{
@@ -51,16 +49,6 @@ void connection::read_request()
 	}
 
 	write_response();
-
-	if(ec)
-	{
-		connection_manager_.stop(shared_from_this());
-		return;
-	}
-
-	bool keep_going = request_handler_.tunnel_request(request_buffer_, response_buffer_);
-
-	bytes_transferred = socket_.write_some(boost::asio::buffer(response_buffer_), ec);
 
 	if(ec)
 	{
@@ -84,6 +72,6 @@ void connection::write_response()
     }
 }
 
-} // namespace server
+} // namespace http
 } // namespace pivotal
 

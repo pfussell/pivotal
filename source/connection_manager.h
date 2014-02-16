@@ -5,7 +5,7 @@
 #include "connection.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 class connection_manager
 {
@@ -22,5 +22,5 @@ private:
     std::set<connection_ptr> connections_;
 };
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

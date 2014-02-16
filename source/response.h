@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include <boost/asio.hpp>
 
 #include "header.h"
 
 namespace pivotal {
-namespace server {
+namespace http {
 
 struct response
 {
@@ -36,10 +37,12 @@ struct response
 
     std::string content;
 
+    std::string to_string() const;
+
     std::vector<boost::asio::const_buffer> to_buffers();
 
     static response stock_response(status_type status);
 };
 
-} // namespace server
+} // namespace http
 } // namespace pivotal

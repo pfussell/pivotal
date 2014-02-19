@@ -9,8 +9,6 @@
 namespace pivotal {
 namespace http {
 
-enum { buffer_size = 8192 }; 
-
 enum class http_version
 {
 	http10,

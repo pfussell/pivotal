@@ -4,8 +4,6 @@
 #include <string>
 
 #include "credentials.h"
-#include "connection.h"
-#include "connection_manager.h"
 #include "request_forwarder.h"
 #include "session.h"
 #include "standard_policy.h"
@@ -45,8 +43,6 @@ private:
     standard_policy policy_;
 
     simple_credentials_manager credentials_;
-
-    request_forwarder forwarder_;
 };
 
 } // namespace http

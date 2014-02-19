@@ -24,11 +24,11 @@ int main()
 		
 		pivotal::http::server server(io_service, "0.0.0.0", "4040");
 		
-        bool threaded = false;
+        bool threaded = true;
         
         if(threaded)
         {
-            size_t num_threads = 1;//choose_thread_count();
+            size_t num_threads = choose_thread_count();
             std::cout << "Starting pivotal proxy server using " << num_threads << " threads" << std::endl;
             
             std::vector<std::shared_ptr<std::thread>> threads;

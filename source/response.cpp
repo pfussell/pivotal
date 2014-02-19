@@ -246,7 +246,7 @@ response response::stock_response(response::status_type status)
   return rep;
 }
 
-std::string response::to_string() const
+std::string response::to_string(unsigned char http_version_major, unsigned char http_version_minor) const
 {
     std::stringstream ss;
     switch (status)
@@ -309,6 +309,7 @@ std::string response::to_string() const
     {
         ss << header.name << ": " << header.value << "\r\n";
     }
+
     ss << "\r\n";
     ss << content;
     return ss.str();

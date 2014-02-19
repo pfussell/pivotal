@@ -51,7 +51,7 @@ server::server(boost::asio::io_service& io_service, const std::string& address, 
 
 session::pointer server::make_session()
 {
-	return session::create(acceptor_.get_io_service(), session_manager_, credentials_, policy_, rng_, forwarder_);
+	return session::create(acceptor_.get_io_service(), session_manager_, credentials_, policy_, rng_);
 }
 
 void server::handle_accept(session::pointer new_session, const boost::system::error_code& error)

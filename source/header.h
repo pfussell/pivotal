@@ -7,6 +7,12 @@ namespace http {
 
 struct header
 {
+	header(const std::string &name = "", const std::string &value = "")
+		: name(name),
+		  value(value)
+	{
+	}
+
 	std::string name;
 	std::string value;
 };

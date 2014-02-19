@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <locale>
 
 #include "request_parser.h"
@@ -16,9 +17,11 @@ void request_parser::finalize(request &req)
 {
     req.port = 80;
 
+    // First - split http[s]://domain.abc/anything into http[s] and domain.abs/anything
     auto scheme_separator = std::find(req.uri.begin(), req.uri.end(), ':');
 	req.protocol = std::string(req.uri.begin(), scheme_separator);
 
+    // uri didn't start with http:// or https:// so split on /
 	if(!(req.protocol == "http" || req.protocol == "https"))
     {
 		req.protocol = "";

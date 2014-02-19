@@ -33,11 +33,17 @@ struct response
 		connected = 1001
     } status;
 
+	struct
+	{
+		unsigned char major;
+		unsigned char minor;
+	} http_version;
+
     std::vector<header> headers;
 
     std::string content;
 
-    std::string to_string() const;
+    std::string to_string(unsigned char http_version_major, unsigned char http_version_minor) const;
 
     std::vector<boost::asio::const_buffer> to_buffers();
 

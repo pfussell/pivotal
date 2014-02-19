@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pivotal", "pivotal.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver", "driver.vcxproj", "{03CCC8D0-0280-4701-81F5-9AA394AC98BA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pivotal_test", "..\pivotal_test\pivotal_test.vcxproj", "{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -39,6 +41,17 @@ Global
 		{03CCC8D0-0280-4701-81F5-9AA394AC98BA}.Release|Win32.Build.0 = Release|Win32
 		{03CCC8D0-0280-4701-81F5-9AA394AC98BA}.Release|x64.ActiveCfg = Release|x64
 		{03CCC8D0-0280-4701-81F5-9AA394AC98BA}.Release|x64.Build.0 = Release|x64
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|Win32.Build.0 = Debug|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|x64.ActiveCfg = Debug|x64
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Debug|x64.Build.0 = Debug|x64
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Release|Win32.ActiveCfg = Release|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Release|Win32.Build.0 = Release|Win32
+		{BB0C4DAA-CB98-4460-9831-53407B9E3FC4}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

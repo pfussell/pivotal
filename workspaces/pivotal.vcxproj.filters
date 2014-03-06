@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\source\connection.cpp" />
-    <ClCompile Include="..\source\connection_manager.cpp" />
     <ClCompile Include="..\source\dllmain.cpp" />
     <ClCompile Include="..\source\request_forwarder_boost.cpp" />
     <ClCompile Include="..\source\response.cpp" />
@@ -13,8 +11,6 @@
     <ClCompile Include="..\source\session.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\connection.h" />
-    <ClInclude Include="..\source\connection_manager.h" />
     <ClInclude Include="..\source\credentials.h" />
     <ClInclude Include="..\source\header.h" />
     <ClInclude Include="..\source\request.h" />

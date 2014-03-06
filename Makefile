@@ -11,7 +11,7 @@ INCLUDE_DIRS = $(shell botan-config-1.11 --cflags)
 ifeq ($(OS), mingw)
 	CXX = g++
 	LANG_FLAGS += -D_UNICODE -DUNICODE
-	LIBS += -lssp -lws2_32 -lmswsock -lwininet
+	LIBS += -lssp -lws2_32 -lmswsock -lwininet -static -static-libgcc -static-libstdc++
 else
 	CXX = clang++
 endif
@@ -50,7 +50,7 @@ OBJS = build/request_forwarder_wininet.o \
 
 # Build Commands
 
-build/%.o: ./source/%.cpp
+build/%.o: ./source/%.cpp Makefile
 	$(CXX) -m$(SYSTEM) $(LANG_FLAGS) $(WARN_FLAGS) $(INCLUDE_DIRS) -c $< -o $@
 
 $(OBJDIR):

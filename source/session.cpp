@@ -47,7 +47,8 @@ m_strand(io_service),
 	credentials,
 	policy,
 	rng),
-	tunnel_established(false)
+	tunnel_established(false),
+	stop_after_write_(false)
 {
 }
 
@@ -117,10 +118,17 @@ void session::handle_write(const boost::system::error_code& error)
 {
 	if(!error)
 	{
-		m_write_buf.clear();
+		if(stop_after_write_)
+		{
+			stop();
+		}
+		else
+		{
+			m_write_buf.clear();
 
-		// initiate another write if needed
-		tls_output_wanted(nullptr, 0);
+			// initiate another write if needed
+			tls_output_wanted(nullptr, 0);
+		}
 	}
 	else
 	{

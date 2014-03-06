@@ -229,10 +229,6 @@ struct request_forwarder_impl
 				keep_reading = InternetReadFile(h_request, read_buffer.data(), read_buffer.size(), &bytes_read);
 				response.content.append(std::string(read_buffer.data(), bytes_read));
 			} while(keep_reading && bytes_read > 0);
-			if(response.content.size() > 0)
-			{
-				response.status = response::status_type::ok;
-			}
 		}
 		catch(std::exception e)
 		{
@@ -350,6 +346,8 @@ response request_forwarder::forward_request(const request& request)
 	}
 
 	response = impl_->read_response();
+
+	std::cout << response.to_string(1,1) << std::endl;
 
 	impl_->close_request();
 

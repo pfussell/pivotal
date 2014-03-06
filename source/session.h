@@ -89,6 +89,8 @@ private:
     request_forwarder request_forwarder_;
 
     request request_;
+
+	bool stop_after_write_;
 };
 
 } // namespace http

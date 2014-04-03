@@ -347,8 +347,6 @@ response request_forwarder::forward_request(const request& request)
 
 	response = impl_->read_response();
 
-	std::cout << response.to_string(1,1) << std::endl;
-
 	impl_->close_request();
 
 	return response;

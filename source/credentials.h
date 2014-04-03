@@ -196,13 +196,13 @@ public:
 
 		// Now save both
 
-		std::ofstream key_file(key_file_name.c_str());
-		key_file << PKCS8::PEM_encode(*key, rng, "");
-		key_file.close();
+		//std::ofstream key_file(key_file_name.c_str());
+		//key_file << PKCS8::PEM_encode(*key, rng, "");
+		//key_file.close();
 
-		std::ofstream cert_file(cert_file_name.c_str());
-		cert_file << cert.PEM_encode() << "\n";
-		cert_file.close();
+		//std::ofstream cert_file(cert_file_name.c_str());
+		//cert_file << cert.PEM_encode() << "\n";
+		//cert_file.close();
 
 		return std::make_pair(cert, key.release());
 	}
